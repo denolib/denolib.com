@@ -8,7 +8,7 @@ import axios from "axios";
  * Group 4: rest
  * Group 5: expension
  */
-const MATCHER = /([^\/]+)\/([^\/@]+)(@)?([^\.]*)\.(.*)/;
+const MATCHER = /^\/([^\/]+)\/([^\/@]+)(@)?([^\.]*)\.(.*)/;
 
 export default (req: IncomingMessage, resp: ServerResponse) => {
   try {
