@@ -1,0 +1,17 @@
+{
+  "name": "denolib",
+  "version": 2,
+  "alias": ["denolib.com"],
+  "builds": [
+    {
+      "src": "index.ts",
+      "use": "@now/node@canary"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^11.9.4",
+    "typescript": "^3.3.3"
+  }
+}
