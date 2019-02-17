@@ -1,5 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import axios from "axios";
+import * as qs from "querystring";
+import * as url from "url";
 
 /**
  * Group 1: scope
@@ -12,6 +14,20 @@ const MATCHER = /^\/([^\/]+)\/([^\/@]+)(@)?([^\.]*)\.(.*)/;
 
 export default (req: IncomingMessage, resp: ServerResponse) => {
   try {
+    if (req.url.startsWith("/badge")) {
+      const query = url.parse(req.url).query;
+      const { scope, repo } = qs.parse(query);
+      if (!scope || !repo) {
+        throw new InvalidUrlException();
+      }
+      resp.statusCode = 301;
+      resp.setHeader(
+        "Location",
+        `https://img.shields.io/badge/dynamic/json.svg?label=DenoLib&query=$.name&style=flat-square&url=https://raw.githubusercontent.com/${scope}/${repo}/master/denolib.json`
+      );
+      resp.end();
+    }
+
     if (req.url === "/") {
       resp.statusCode = 301;
       resp.setHeader("Location", "https://github.com/denolib/denolib.com");
@@ -38,6 +54,8 @@ export default (req: IncomingMessage, resp: ServerResponse) => {
         resp.end(body.data);
       })
       .catch(err => {
+        resp.statusCode = 404;
+        resp.end("Not Found");
         if (expension === "js") {
           // TODO: https://github.com/denoland/registry/issues/39
         }
