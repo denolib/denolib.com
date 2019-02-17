@@ -7,10 +7,10 @@ import * as url from "url";
  * Group 1: scope
  * Group 2: repo
  * Group 3: @
- * Group 4: rest
- * Group 5: expension
+ * Group 4: branch
+ * Group 5: rest
  */
-const MATCHER = /^\/([^\/]+)\/([^\/@]+)(@)?([^\.]*)\.(.*)/;
+export const MATCHER = /^\/([^\/]+)\/([^\/@]+)(@)?([^\/]*)(.*)/;
 
 export default (req: IncomingMessage, resp: ServerResponse) => {
   try {
@@ -36,7 +36,7 @@ export default (req: IncomingMessage, resp: ServerResponse) => {
     if (!MATCHER.test(req.url)) {
       throw new InvalidUrlException();
     }
-    const [, scope, repo, versionSpecified, rest, expension] = MATCHER.exec(
+    const [, scope, repo, versionSpecified, branch, rest] = MATCHER.exec(
       req.url
     );
     if (!scope || !repo) {
@@ -45,8 +45,8 @@ export default (req: IncomingMessage, resp: ServerResponse) => {
     axios
       .get(
         `https://raw.githubusercontent.com/${scope}/${repo}/${
-          versionSpecified ? "" : "master"
-        }${rest}.${expension}`
+          versionSpecified ? branch : "master"
+        }${rest}`
       )
       .then(body => {
         resp.setHeader("Content-Type", "text/plain");
@@ -56,7 +56,7 @@ export default (req: IncomingMessage, resp: ServerResponse) => {
       .catch(err => {
         resp.statusCode = 404;
         resp.end("Not Found");
-        if (expension === "js") {
+        if (rest.endsWith(".js")) {
           // TODO: https://github.com/denoland/registry/issues/39
         }
       });
