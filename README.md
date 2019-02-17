@@ -1,3 +1,5 @@
+> Notice: Adding a badge can help your module be searched. The search page is in process.
+
 # DenoLib
 
 ## Usage
