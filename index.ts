@@ -16,14 +16,15 @@ export default (req: IncomingMessage, resp: ServerResponse) => {
   try {
     if (req.url.startsWith("/badge")) {
       const query = url.parse(req.url).query;
-      const { scope, repo } = qs.parse(query);
+      const { scope, repo, style } = qs.parse(query);
       if (!scope || !repo) {
         throw new InvalidUrlException();
       }
+      const styleParameter = style ? `&style=${style}` : '';
       resp.statusCode = 301;
       resp.setHeader(
         "Location",
-        `https://img.shields.io/badge/dynamic/json.svg?label=DenoLib&query=$.name&style=flat-square&url=https://raw.githubusercontent.com/${scope}/${repo}/master/denolib.json`
+        `https://img.shields.io/badge/dynamic/json.svg?label=DenoLib&query=$.name${styleParameter}&url=https://raw.githubusercontent.com/${scope}/${repo}/master/denolib.json`
       );
       resp.end();
     }
