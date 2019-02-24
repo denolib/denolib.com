@@ -28,3 +28,6 @@ Markdown:
 ```md
 ![DenoLib](https://denolib.com/badge?scope=${scope}&repo=${repo})
 ```
+
+Optional parameters:
+- `style` - you can pass optional `style` parameter with [supported value](https://shields.io/#styles), for example: `![DenoLib](https://denolib.com/badge?scope=${scope}&repo=${repo}&style=${style})` where `const style = "flat-square"`
